@@ -1,17 +1,16 @@
 import { expect, test } from "@playwright/test";
 
+import { HomePageHelper } from "../helpers/homePage";
 import dotenv from "dotenv";
 
 dotenv.config();
-
 test.use({ userAgent: process.env.USER_AGENT });
 
 test("critical elements home page test", async ({ page }) => {
 
-  await page.goto("https://www.funda.nl/");
-  await page
-    .getByRole("button", { name: "Akkoord  en sluiten: Akkoord" })
-    .click();
+  const homePageHelper = new HomePageHelper();
+  await homePageHelper.loadBaseUrl(page);
+  await homePageHelper.acceptAllCookies(page);
 
   // Three most crucial HTML elements
   await expect(
@@ -37,8 +36,13 @@ test("critical elements home page test", async ({ page }) => {
   await expect(page.getByRole("link", { name: "English" })).toBeVisible();
 });
 
-test("search results for buying sanity checks", async ({ page }) => {
+test("search results for buyers sanity checks", async ({ page }) => {
+    
+    
+    /*
+       page.getByTestId("search-box") 
 
+    */
 });
 
 test("user login sanity checks", async ({ page }) => {

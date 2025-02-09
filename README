@@ -24,6 +24,18 @@ Extra info: After checking for crucial HTML elements it is time to identify the 
     - one-remaining... (which I need to think of)
 I will take a 30 minutes brake and walk the dog and after that I will continue
 
+Commit message: Added HomePageHelper for code which needs to be frequently repeated.
+Extra info: You want to avoid code duplication in general. Therefore, loadBaseUrl() and acceptAllCookies() methods are added. 
+
+Commit message:
+Extra info: 
+
+Commit message:
+Extra info: 
+
+Commit message:
+Extra info: 
+
 Commit message:
 Extra info: 
 
