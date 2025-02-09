@@ -37,6 +37,23 @@ test("critical elements home page test", async ({ page }) => {
   await expect(page.getByRole("link", { name: "English" })).toBeVisible();
 });
 
+test("search results for buying sanity checks", async ({ page }) => {
+
+});
+
+test("user login sanity checks", async ({ page }) => {
+
+});
+
+test("makelaar login sanity checks", async ({ page }) => {
+
+});
+
+test("...", async ({ page }) => {
+
+});
+
+
 /*
 Target: 
 We want to have 5 automated smoke tests which would help us releasing the website 

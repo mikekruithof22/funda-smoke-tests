@@ -16,8 +16,13 @@ IV. Added README file
 Commit message: First smoke test - most crucial HTML elements
 Extra info: The first smoke test should be a check if the most crucial HTML elements are loaded. I limited the expects to 10 (because it is good practice to check 5 to 10 things per test). 
 
-Commit message:
-Extra info: 
+Commit message: Thinking about four other smoke tests
+Extra info: After checking for crucial HTML elements it is time to identify the most crucial paths for the fuda.nl application. I thought of the following: 
+    - search results for buying sanity checks
+    - user login sanity checks
+    - makelaar login sanity checks
+    - one-remaining... (which I need to think of)
+I will take a 30 minutes brake and walk the dog and after that I will continue
 
 Commit message:
 Extra info: 
