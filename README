@@ -13,8 +13,8 @@ II. Added a .env (so that user agent will never be shared on GitHub)
 III. Added .gitignore file
 IV. Added README file
 
-Commit message:
-Extra info: 
+Commit message: First smoke test - most crucial HTML elements
+Extra info: The first smoke test should be a check if the most crucial HTML elements are loaded. I limited the expects to 10 (because it is good practice to check 5 to 10 things per test). 
 
 Commit message:
 Extra info: 
