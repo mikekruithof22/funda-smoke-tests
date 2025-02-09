@@ -1,0 +1,26 @@
+# README
+In order to help reviewing this assignment I will add brief explanations - if necessary - for each commit. 
+
+## Usage
+Add a .env file and add USER_AGENT={your-user-agent-value}
+Run "npm i" and you can run the tests
+
+## Commits explained
+Commit message: "Initial commit - project setup"
+Extra info: 
+I. Playwright project initiated as explained in the Docs 
+II. Added a .env (so that user agent will never be shared on GitHub)
+III. Added .gitignore file
+IV. Added README file
+
+Commit message:
+Extra info: 
+
+Commit message:
+Extra info: 
+
+Commit message:
+Extra info: 
+
+Commit message:
+Extra info: 
