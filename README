@@ -2,7 +2,7 @@
 In order to help reviewing this assignment I will add brief explanations - if necessary - for each commit. 
 
 ## Usage
-Add a .env file and add USER_AGENT={your-user-agent-value}
+Add a .env file and add: USER_AGENT={your-user-agent-value}, CUSTOMER_USER={user@email.com} and CUSTOMER_PWD={password}
 Run "npm i" and you can run the tests
 
 ## Commits explained
@@ -11,7 +11,7 @@ Extra info:
 I. Playwright project initiated as explained in the Docs 
 II. Added a .env (so that user agent will never be shared on GitHub)
 III. Added .gitignore file
-IV. Added README file
+IV. Added README fileawait page.getByRole('link', { name: 'Plattegrond' }).click();
 
 Commit message: First smoke test - most crucial HTML elements
 Extra info: The first smoke test should be a check if the most crucial HTML elements are loaded. I limited the expects to 10 (because it is good practice to check 5 to 10 things per test). 
@@ -34,7 +34,7 @@ Commit message: first search test works.
 Extra info: 
 
 Commit message: Added I. search result test, II. user login and logout test III. real estate user login and logout test. The helper got a constructor and some checks regarding the .env values
-Extra info: 
+Extra info: I think it is almost done. Next step is to pretty the code and perhaps add some optimizations. 
 
 Commit message:
 Extra info: 

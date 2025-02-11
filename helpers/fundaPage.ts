@@ -16,20 +16,19 @@ export class FundaPageHelper {
 
     constructor(page: Page) {
         this.page = page;
-
         this.dotEnvChecks();
     }
 
-    async loadPageAndAcceptCookies(page: Page) {
+    async loadPageAndAcceptCookies(page: Page): Promise<void> {
         await this.loadBaseUrl(page);
         await this.acceptAllCookies(page);
     }
 
-    private async loadBaseUrl(page: Page) {
+    private async loadBaseUrl(page: Page): Promise<void> {
         await page.goto(this.baseUrl);
     }
     
-    private async acceptAllCookies(page: Page) {
+    private async acceptAllCookies(page: Page): Promise<void> {
         await expect(page.getByTestId("notice")).toBeVisible();
         await page
             .getByRole("button", { name: "Akkoord  en sluiten: Akkoord" })
@@ -37,16 +36,23 @@ export class FundaPageHelper {
     }  
 
     private dotEnvChecks(): void {
+        const missingEnvVars: string[] = [];
+    
         if (!this.testUserEmail) {
-            throw new Error('No valid customer user configured, check your .env file');
+            missingEnvVars.push('customer user (testUserEmail)');
         }
-
-        if (!this.testUserEmail) {
-            throw new Error('No valid customer email configured, check your .env file');
+    
+        if (!this.testUserPwd) {
+            missingEnvVars.push('customer email (testUserPwd)');
         }
-
+    
         if (!process.env.USER_AGENT) {
-            throw new Error('No valid user agent configured, check your .env file');
+            missingEnvVars.push('user agent (USER_AGENT)');
+        }
+    
+        if (missingEnvVars.length > 0) {
+            console.warn(`Missing environment variables: ${missingEnvVars.join(', ')}. Please check your .env file.`);
+            return; 
         }
     }
 }
