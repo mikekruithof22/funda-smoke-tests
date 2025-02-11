@@ -27,13 +27,13 @@ I will take a 30 minutes brake and walk the dog and after that I will continue
 Commit message: Added HomePageHelper for code which needs to be frequently repeated.
 Extra info: You want to avoid code duplication in general. Therefore, loadBaseUrl() and acceptAllCookies() methods are added. 
 
-Commit message:
+Commit message: smoke test 2 (almost done) and 3 (under construction) 
+Extra info: I needed to stop so a work in progress commit
+
+Commit message: first search test works. 
 Extra info: 
 
-Commit message:
-Extra info: 
-
-Commit message:
+Commit message: Added I. search result test, II. user login and logout test III. real estate user login and logout test. The helper got a constructor and some checks regarding the .env values
 Extra info: 
 
 Commit message:

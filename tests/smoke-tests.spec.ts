@@ -1,13 +1,13 @@
 import { expect, test } from "@playwright/test";
 
-import { HomePageHelper } from "../helpers/homePage";
+import { FundaPageHelper } from "../helpers/fundaPage";
 import dotenv from "dotenv";
 
 dotenv.config();
 test.use({ userAgent: process.env.USER_AGENT });
 
 test("critical elements home page test", async ({ page }) => {
-  const homePageHelper = new HomePageHelper();
+  const homePageHelper = new FundaPageHelper(page);
   await homePageHelper.loadPageAndAcceptCookies(page);
 
   // Three most crucial HTML elements
@@ -36,8 +36,9 @@ test("critical elements home page test", async ({ page }) => {
 
 
 test.describe('search', () => {
+  
   test("search results appear", async ({ page }) => {
-    const homePageHelper = new HomePageHelper();
+    const homePageHelper = new FundaPageHelper(page);
     await homePageHelper.loadPageAndAcceptCookies(page);
   
     await page.getByTestId("search-box").click();
@@ -62,10 +63,8 @@ test.describe('search', () => {
     }
   });
   
-  
-  test("basic filtering check", async ({ page }) => {
-new Promise((resolve) => setTimeout(resolve, 2000)); // TODO: tmp code, remove when done.
-    const homePageHelper = new HomePageHelper();
+  test("open first search result", async ({ page }) => {
+    const homePageHelper = new FundaPageHelper(page);
     await homePageHelper.loadPageAndAcceptCookies(page);
   
     await page.getByTestId("search-box").click();
@@ -74,58 +73,70 @@ new Promise((resolve) => setTimeout(resolve, 2000)); // TODO: tmp code, remove w
       .getByRole("option", { name: "Amsterdam Plaats in Noord-" })
       .click();
   
-    const beforeFilterText = await page.getByTestId('pageHeader').getByText('koopwoningen').innerText();
+    await expect(
+      page.getByTestId("searchBoxSuggestions-mobile").getByText("Amsterdam")
+    ).toBeVisible();
+    
+    const searchResultContainers = page.locator("div.border-b.pb-3");  
+    const searchResultContainer = searchResultContainers.nth(2);
+    await expect(searchResultContainer).toBeVisible();
 
-    const houseAmountBeforeFiltering = parseInt(beforeFilterText.replace(/\D/g, ''), 10);
-    await expect(page.getByRole("button", { name: "Filters" })).toBeVisible();
-  
-    // Open filter and filter on 'woonhuis'
-    await page.getByRole("button", { name: "Filters" }).click();
-    await page.getByTestId("checkbox-house").click();
-    // await expect(page.getByText("FiltersSluitenKoopHuurPrijs")).toBeVisible();
-  
-    // await page.getByRole("checkbox", { name: "Woonhuis" }).check();
-    // expect(page.getByRole("checkbox", { name: "Woonhuis" })).toBeChecked();
-new Promise((resolve) => setTimeout(resolve, 2000)); // TODO: tmp code, remove when done.
+    await page.getByTestId("listingDetailsAddress").nth(2).click();
 
-    // Three sanity checks after filtering: I. Filter appears left top II. url gets query params  
-    // III. amount of houses is lower after filtering
-    await expect(page).toHaveURL(`${homePageHelper.baseUrl}?object_type=["house"]`);
-    const woonhuisFilter = page.getByTestId("SelectedFilterobject_type");
-    await expect(woonhuisFilter).toBeVisible();
-
-
-    const afterFilterText = await page.getByTestId('pageHeader').getByText('koopwoningen').innerText();
-    const houseAmountAfterFiltering = parseInt(afterFilterText.replace(/\D/g, ''), 10);
-
-    // Assert that the numeric value has decreased
-    expect(houseAmountAfterFiltering).toBeLessThan(houseAmountBeforeFiltering);
+    await expect(page).toHaveURL(/.*detail/);
+    await expect(page.getByRole('heading', { name: 'Omschrijving' })).toBeVisible()
+    await expect(page.getByRole('link', { name: 'Vraag bezichtiging aan' })).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Kenmerken' })).toBeVisible()
+    
   });
 
 });
 
+test("user can login and logout", async ({ page }) => {
+  const homePageHelper = new FundaPageHelper(page);
+  await homePageHelper.loadPageAndAcceptCookies(page);
+  // login
+  await page.getByRole('button', { name: 'Inloggen' }).click();
+  await expect(page).toHaveURL(/.*account/);
 
+  await page.getByRole('textbox', { name: 'E-mailadres' }).click();
+  await page.getByRole('textbox', { name: 'E-mailadres' }).fill(homePageHelper.testUserEmail as string);
+  await page.getByRole('textbox', { name: 'Wachtwoord' }).click();
+  await page.getByRole('textbox', { name: 'Wachtwoord' }).fill(homePageHelper.testUserPwd as string);
+  await page.getByRole('button', { name: 'Log in' }).click();
 
-// test("user login sanity checks", async ({ page }) => {
-  // await page.getByRole('button', { name: 'Inloggen' }).click();
-  // await page.getByRole('textbox', { name: 'E-mailadres' }).click();
-  // await page.getByRole('textbox', { name: 'E-mailadres' }).fill('mikekruithof22@hotmail.com');
-  // await page.getByRole('textbox', { name: 'Wachtwoord' }).click();
-  // await page.getByRole('textbox', { name: 'Wachtwoord' }).fill('6Usedaforce!');
-  // await page.getByRole('button', { name: 'Log in' }).click();
   
-// });
+  await page.locator('#headlessui-menu-button-v-0-34').click();
+  await expect(page.getByText('Mijn account', { exact: true }).nth(1)).toBeVisible();
+  await expect(page.getByText('Uitloggen', { exact: true }).nth(1)).toBeVisible();
 
-// test("makelaar login sanity checks", async ({ page }) => {
+  // log out
+  await page.getByText('Uitloggen', { exact: true }).nth(1).click();
+  await expect(page).toHaveURL(`${homePageHelper.baseUrl}`); 
+  await expect(page.getByRole('button', { name: 'Inloggen' })).toBeVisible();
+  
+});
 
-// goto https://login.fundadesk.nl/
-// await page2.getByRole('link', { name: 'Inloggen voor makelaars' }).click();
-// await page2.getByRole('textbox', { name: 'Gebruikersnaam' }).click();
-// await page2.getByRole('textbox', { name: 'Gebruikersnaam' }).fill('blabla');
-// await page2.getByRole('textbox', { name: 'Gebruikersnaam' }).press('Tab');
-// await page2.getByRole('textbox', { name: 'Wachtwoord' }).fill('blabwachtwoord');
-// await page2.getByRole('button', { name: 'Log in' }).click();
-// });
+test("real estate agent can login and logout", async ({ page }) => {
+  const homePageHelper = new FundaPageHelper(page);
+  await page.goto(homePageHelper.fundaDeskUrl);
+
+  await page.getByRole('link', { name: 'Inloggen voor makelaars' }).click();
+  await expect(page).toHaveURL(/.*account/);
+
+  await page.getByRole('textbox', { name: 'Gebruikersnaam' }).click();
+  await page.getByRole('textbox', { name: 'Gebruikersnaam' }).fill(homePageHelper.realEstateUserName);
+  await page.getByRole('textbox', { name: 'Wachtwoord' }).click();
+  await page.getByRole('textbox', { name: 'Wachtwoord' }).fill(homePageHelper.realEstatePwd);
+  await page.getByRole('button', { name: 'Log in' }).click();
+
+  // Since I'm not a real estate agent, I can't go further. Suppose I had real estate user credentials I would
+  // perform a couple of checks on the next screen (with info for logged in real estate users)
+  // ... 
+
+});
+
+
 
 /*
 Target: const page1Promise = page.waitForEvent('popup');
